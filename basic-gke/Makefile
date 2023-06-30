@@ -16,7 +16,8 @@ destroy: init fmt
 
 gcloud-login:
 	gcloud auth login
-	gcloud config set project suzutan0s2-286610
+gcloud-setup:
 	gcloud components install gke-gcloud-auth-plugin
 set-context:
+	gcloud config set project suzutan0s2-286610
 	gcloud container clusters get-credentials labo-basic-gke --region asia-northeast1

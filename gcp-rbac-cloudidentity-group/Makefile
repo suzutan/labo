@@ -21,3 +21,10 @@ gcloud-setup:
 set-context:
 	gcloud config set project harvestasya-344919
 	gcloud container clusters get-credentials labo-basic-gke --region asia-northeast1
+
+build-manifest:
+	kustomize build manifests/overlays
+
+
+apply-manifest: set-context
+	kustomize build manifests/overlays | kubectl apply -f-

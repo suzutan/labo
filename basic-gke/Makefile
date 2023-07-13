@@ -19,5 +19,5 @@ gcloud-login:
 gcloud-setup:
 	gcloud components install gke-gcloud-auth-plugin
 set-context:
-	gcloud config set project suzutan0s2-286610
+	gcloud config set project harvestasya-344919
 	gcloud container clusters get-credentials labo-basic-gke --region asia-northeast1

@@ -28,3 +28,13 @@ build-manifest:
 
 apply-manifest: set-context
 	kustomize build manifests/overlays | kubectl apply -f-
+
+check-iam:
+	kubectl auth can-i delete deployment/nginx --as member-1@harvestasya.org --as-group team-a@harvestasya.org -n team-a || :
+	kubectl auth can-i delete deployment/nginx --as member-2@harvestasya.org --as-group team-a@harvestasya.org -n team-a || :
+	kubectl auth can-i delete deployment/nginx --as member-3@harvestasya.org --as-group team-b@harvestasya.org -n team-b || :
+	kubectl auth can-i delete deployment/nginx --as member-4@harvestasya.org --as-group team-b@harvestasya.org -n team-b || :
+	kubectl auth can-i delete deployment/nginx --as member-1@harvestasya.org --as-group team-a@harvestasya.org -n team-b || :
+	kubectl auth can-i delete deployment/nginx --as member-2@harvestasya.org --as-group team-a@harvestasya.org -n team-b || :
+	kubectl auth can-i delete deployment/nginx --as member-3@harvestasya.org --as-group team-b@harvestasya.org -n team-a || :
+	kubectl auth can-i delete deployment/nginx --as member-4@harvestasya.org --as-group team-b@harvestasya.org -n team-a || :

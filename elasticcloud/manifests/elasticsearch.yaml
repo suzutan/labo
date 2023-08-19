@@ -1,0 +1,51 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: quickstart
+spec:
+  version: 7.14.0
+  nodeSets:
+    - name: default
+      count: 5
+      config:
+        node.master: true
+        node.data: true
+        node.ingest: true
+        node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  memory: 2Gi
+                  cpu: 1
+                limits:
+                  memory: 2Gi
+                  cpu: 1
+              lifecycle:
+                preStop:
+                  exec:
+                    command:
+                      - "sh"
+                      - "-c"
+                      - |
+                        #!/bin/sh
+                        ES_POD_NAME=$(hostname)
+                        curl -X PUT "localhost:9200/_cluster/settings" -H 'Content-Type: application/json' -d '{
+                          "transient": {
+                            "cluster.routing.allocation.exclude._name": "'$ES_POD_NAME'"
+                          }
+                        }'
+                postStart:
+                  exec:
+                    command:
+                      - "sh"
+                      - "-c"
+                      - |
+                        #!/bin/sh
+                        curl -X PUT "localhost:9200/_cluster/settings" -H 'Content-Type: application/json' -d '{
+                          "transient": {
+                            "cluster.routing.allocation.exclude._name": null
+                          }
+                        }'

@@ -1,0 +1,50 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  init:
+    cmds:
+      - terraform init --reconfigure
+  fmt:
+    cmds:
+      - terraform fmt -recursive .
+  plan:
+    deps:
+      - init
+      - fmt
+    cmds:
+      - task: init
+      - task: fmt
+      - terraform plan
+  apply:
+    deps:
+      - init
+      - fmt
+    cmds:
+      - task: init
+      - task: fmt
+      - terraform plan
+  destroy:
+    deps:
+      - init
+      - fmt
+    cmds:
+      - task: init
+      - task: fmt
+      - terraform destroy
+  gcloud-login:
+    cmds:
+      - gcloud auth login
+
+  gcloud-setup:
+    cmds:
+      - gcloud components install gke-gcloud-auth-plugin
+
+  set-context:
+    cmds:
+      - gcloud config set project harvestasya-344919
+      - gcloud container clusters get-credentials labo-basic-gke --region asia-northeast1

@@ -27,7 +27,7 @@ tasks:
     cmds:
       - task: init
       - task: fmt
-      - terraform plan
+      - terraform apply
   destroy:
     deps:
       - init
